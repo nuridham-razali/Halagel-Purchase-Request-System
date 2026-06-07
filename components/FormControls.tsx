@@ -22,6 +22,26 @@ export const FormInput: React.FC<InputProps> = ({ label, className, textarea, ..
   </div>
 );
 
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label: string;
+  options: string[];
+}
+
+export const FormSelect: React.FC<SelectProps> = ({ label, className, options, ...props }) => (
+  <div className={`flex flex-col group ${className}`}>
+    <label className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1.5 ml-1 transition-colors group-focus-within:text-blue-600">{label}</label>
+    <select
+      className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-gray-800 text-sm focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all cursor-pointer"
+      {...props}
+    >
+      <option value="" disabled>Select an option</option>
+      {options.map((opt, idx) => (
+        <option key={idx} value={opt}>{opt}</option>
+      ))}
+    </select>
+  </div>
+);
+
 export const CheckboxGroup: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
   <div className="flex flex-col gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
     <span className="text-sm font-bold text-gray-800 border-b border-gray-100 pb-2">{label}</span>

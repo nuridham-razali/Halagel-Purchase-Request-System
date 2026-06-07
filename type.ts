@@ -98,3 +98,77 @@ export const INITIAL_DATA: DesignRequestData = {
   requestedByPosition: '',
   requestedByDate: new Date().toISOString().split('T')[0],
 };
+
+// --- PURCHASE REQUISITION TYPES ---
+
+export interface PurchaseItem {
+  id: string;
+  itemCode: string;
+  description: string;
+  uom: string;
+  quantity: number | string; // Changed to allow string input for better UX
+  costPerUnit: number | string; // Changed to allow string input for better UX
+}
+
+export interface PurchaseRequisitionData {
+  date: string;
+  prNo: string; // e.g., ADMIN/2025/0031
+  companyName: string; // Added company name selection
+  requesterName: string;
+  department: string;
+  deliveryRequirement: string; // e.g., ASAP
+  accountCode: string;
+  
+  purpose: string; // "Purpose/Justification for Purchasing"
+  purposeMonth: string; // e.g. "NOVEMBER 2025"
+
+  items: PurchaseItem[];
+  
+  recommendedSupplier: string;
+  contactPerson: string;
+  telNo: string;
+  faxNo: string;
+  term: string;
+
+  // Signatures
+  requestedBy: { name: string; date: string; signature: string };
+  approvedBy: { name: string; date: string };
+  acknowledgedAdmin: { name: string; date: string };
+  acknowledgedPurchasing: { name: string; date: string };
+}
+
+export interface PurchaseLog {
+  id: string;
+  prNo: string;
+  requesterName: string;
+  companyName: string;
+  department: string;
+  dateCreated: string; // Keep for backward compatibility
+  createdAtTime: string;
+  status?: string;
+  data?: PurchaseRequisitionData;
+}
+
+export const INITIAL_PURCHASE_DATA: PurchaseRequisitionData = {
+  date: new Date().toISOString().split('T')[0],
+  prNo: `ADMIN/${new Date().getFullYear()}/`,
+  companyName: 'HALAGEL (M) SDN. BHD.',
+  requesterName: '',
+  department: '',
+  deliveryRequirement: 'ASAP',
+  accountCode: '',
+  purpose: '',
+  purposeMonth: '',
+  items: [
+    { id: '1', itemCode: '', description: '', uom: 'UNIT', quantity: 1, costPerUnit: 0 }
+  ],
+  recommendedSupplier: '',
+  contactPerson: '',
+  telNo: '',
+  faxNo: '',
+  term: '',
+  requestedBy: { name: '', date: new Date().toISOString().split('T')[0], signature: '' },
+  approvedBy: { name: '', date: '' },
+  acknowledgedAdmin: { name: '', date: '' },
+  acknowledgedPurchasing: { name: '', date: '' }
+};
