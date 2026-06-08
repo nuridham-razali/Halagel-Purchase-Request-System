@@ -6,6 +6,7 @@ import { PurchaseRequisitionData, INITIAL_PURCHASE_DATA, PurchaseItem, PurchaseL
 import { PurchasePdfTemplate } from './PurchasePdfTemplate';
 import { FormInput, FormSelect } from './FormControls';
 import { LOGO_BASE64 } from '../constants';
+import { savePurchaseLog, getPurchaseLogs } from '../services/firebasePurchase';
 
 import { ACCOUNT_CODES } from './accountCodes';
 
@@ -38,16 +39,13 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
   const templateRef = useRef<HTMLDivElement>(null);
   const printRef = useRef<HTMLDivElement>(null);
 
-  // Load History from Local Storage
+  // Load History from Firebase
   useEffect(() => {
-    const savedHistory = localStorage.getItem('halagel_purchase_history');
-    if (savedHistory) {
-        try {
-            setPurchaseHistory(JSON.parse(savedHistory));
-        } catch (e) {
-            console.error("Failed to parse history", e);
-        }
-    }
+    const fetchLogs = async () => {
+      const logs = await getPurchaseLogs();
+      setPurchaseHistory(logs);
+    };
+    fetchLogs();
   }, []);
 
   const toUpper = (val: any) => typeof val === 'string' ? val.toUpperCase() : val;
@@ -128,25 +126,24 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
 
   const isCurrentPrNumberUsed = !isPrNumberUnique(purchaseData.prNo);
 
-  const saveToHistory = () => {
+  const saveToHistory = async () => {
       const now = new Date();
-      let updatedHistory;
+      let logToSave: PurchaseLog;
+      
       if (initialLog) {
          // Update existing log
-         updatedHistory = purchaseHistory.map(log => 
-             log.id === initialLog.id ? {
-                 ...log,
-                 prNo: purchaseData.prNo || log.prNo,
-                 requesterName: purchaseData.requesterName,
-                 companyName: purchaseData.companyName,
-                 department: purchaseData.department,
-                 data: purchaseData // update the data
-             } : log
-         );
+         logToSave = {
+             ...initialLog,
+             prNo: purchaseData.prNo || initialLog.prNo,
+             requesterName: purchaseData.requesterName,
+             companyName: purchaseData.companyName,
+             department: purchaseData.department,
+             data: purchaseData // update the data
+         };
       } else {
           // Create new
           const pad = (n: number) => n.toString().padStart(2, '0');
-          const newLog: PurchaseLog = {
+          logToSave = {
               id: Date.now().toString(),
               prNo: purchaseData.prNo || 'DRAFT-' + Math.floor(Math.random() * 1000),
               requesterName: purchaseData.requesterName,
@@ -157,10 +154,18 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
               status: 'Generated',
               data: purchaseData
           };
-          updatedHistory = [newLog, ...purchaseHistory];
       }
-      setPurchaseHistory(updatedHistory);
-      localStorage.setItem('halagel_purchase_history', JSON.stringify(updatedHistory));
+      
+      await savePurchaseLog(logToSave);
+      
+      // Update local state for immediate feedback
+      setPurchaseHistory(prev => {
+          if (initialLog) {
+              return prev.map(log => log.id === logToSave.id ? logToSave : log);
+          } else {
+              return [logToSave, ...prev];
+          }
+      });
   };
 
   const generatePdfBlob = async (): Promise<Blob | null> => {
@@ -211,7 +216,7 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
     setIsGenerating(true);
     const blob = await generatePdfBlob();
     if (blob) {
-        saveToHistory();
+        await saveToHistory();
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -337,9 +342,9 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                         </thead>
                         <tbody>
                             {purchaseData.items.map((item, index) => (
-                                <tr key={item.id} className="border-b">
-                                    <td className="p-2 text-center text-gray-500">{index + 1}</td>
-                                    <td className="p-2">
+                                <tr key={item.id} className="border-b align-top">
+                                    <td className="p-2 text-center text-gray-500 pt-3">{index + 1}</td>
+                                    <td className="p-2 align-top">
                                         <input 
                                             type="text" 
                                             className="w-full p-1 border rounded text-sm text-black"
@@ -347,7 +352,7 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                                             onChange={(e) => handleItemChange(item.id, 'itemCode', e.target.value)}
                                         />
                                     </td>
-                                    <td className="p-2">
+                                    <td className="p-2 align-top">
                                         <textarea 
                                             className="w-full p-1 border rounded text-sm min-h-[40px] resize-y text-black"
                                             value={item.description}
@@ -384,7 +389,7 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                                             )}
                                         </div>
                                     </td>
-                                    <td className="p-2">
+                                    <td className="p-2 align-top">
                                         <input 
                                             type="number" 
                                             className="w-full p-1 border rounded text-sm text-black"
@@ -392,7 +397,7 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                                             onChange={(e) => handleItemChange(item.id, 'quantity', e.target.value)}
                                         />
                                     </td>
-                                    <td className="p-2">
+                                    <td className="p-2 align-top">
                                         <input 
                                             type="number" 
                                             className="w-full p-1 border rounded text-sm text-black"
@@ -400,7 +405,7 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                                             onChange={(e) => handleItemChange(item.id, 'costPerUnit', e.target.value)}
                                         />
                                     </td>
-                                    <td className="p-2 text-center">
+                                    <td className="p-2 text-center align-top pt-3">
                                         {purchaseData.items.length > 1 && (
                                             <button onClick={() => handleRemoveItem(item.id)} className="text-red-400 hover:text-red-600">
                                                 <Trash2 size={16} />

@@ -10,6 +10,8 @@ import { PurchaseLog } from './type';
 import { syncLogsToSheets } from './syncToSheets';
 import { initAuth } from './googleAuth';
 
+import { savePurchaseLog, getPurchaseLogs } from './services/firebasePurchase';
+
 export default function App() {
   const [activeView, setActiveView] = useState<'dashboard' | 'purchase' | 'design' | 'database'>('dashboard');
   const [purchaseHistory, setPurchaseHistory] = useState<PurchaseLog[]>([]);
@@ -102,13 +104,9 @@ export default function App() {
       setDownloadTarget(null);
   };
 
-  const loadHistory = () => {
-    const saved = localStorage.getItem('halagel_purchase_history');
-    if (saved) {
-      try {
-        setPurchaseHistory(JSON.parse(saved));
-      } catch(e) {}
-    }
+  const loadHistory = async () => {
+    const logs = await getPurchaseLogs();
+    setPurchaseHistory(logs);
   };
 
   useEffect(() => {
