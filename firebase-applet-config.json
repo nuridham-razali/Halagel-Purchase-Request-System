@@ -1,9 +1,9 @@
 {
-  "projectId": "clever-chemist-j4wsx",
-  "appId": "1:388045511764:web:2d9567b73226cd3f4ea1c1",
-  "apiKey": "AIzaSyBkK1VSewShASYg2rBMqzGt-AlRDMWr8so",
-  "authDomain": "clever-chemist-j4wsx.firebaseapp.com",
-  "storageBucket": "clever-chemist-j4wsx.firebasestorage.app",
-  "messagingSenderId": "388045511764",
-  "measurementId": ""
+  apiKey: "AIzaSyCN_7P8ma_gOnDuzpZQ6ksp--IoAJQACuo",
+  authDomain: "purchase-request-5015c.firebaseapp.com",
+  projectId: "purchase-request-5015c",
+  storageBucket: "purchase-request-5015c.firebasestorage.app",
+  messagingSenderId: "782509731652",
+  appId: "1:782509731652:web:8f035e51c61ac665f3f111",
+  measurementId: "G-4RTRELVR8F"
 }
