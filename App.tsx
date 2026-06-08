@@ -321,6 +321,12 @@ export default function App() {
           )}
       </main>
 
+      <footer className="w-full py-6 text-center mt-auto">
+         <p className="text-sm text-slate-500">
+            Created by Muhammad Nur Idham Bin Razali
+         </p>
+      </footer>
+
       {/* Off-screen but layout-stable container for PDF Generation */}
       <div className="fixed left-0 top-0 pointer-events-none opacity-0 z-[-50]">
          <div ref={printRef} id="print-container-purchase">
