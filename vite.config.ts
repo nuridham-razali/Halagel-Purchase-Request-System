@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, (process as any).cwd(), '');
   return {
+    base: './',
     plugins: [react()],
     define: {
       // Maps process.env.API_KEY to the actual environment variable during build/dev
