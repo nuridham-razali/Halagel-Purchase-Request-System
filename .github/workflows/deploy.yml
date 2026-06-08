@@ -1,9 +1,8 @@
-
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
   workflow_dispatch:
 
 permissions:
@@ -26,15 +25,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # Cache config removed to prevent errors when package-lock.json is missing
+          # Removed cache: 'npm' because it requires package-lock.json which is missing
 
       - name: Install dependencies
+        # Changed 'npm ci' to 'npm install' because 'npm ci' strictly requires package-lock.json
         run: npm install
 
       - name: Build
-        # Runs Vite build directly to skip TypeScript checking (tsc)
-        # ensuring deployment happens even if there are minor type errors.
-        run: npx vite build
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -45,8 +43,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
