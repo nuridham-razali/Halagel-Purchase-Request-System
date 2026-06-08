@@ -7,7 +7,7 @@ import { PurchaseInterface } from './components/PurchaseInterface';
 import { PurchasePdfTemplate } from './components/PurchasePdfTemplate';
 import { LOGO_BASE64 } from './constants';
 import { PurchaseLog } from './type';
-import { syncLogsToSheetsDB, clearScriptUrl } from './services/appScriptDB';
+import { syncLogsToSheetsDB } from './services/appScriptDB';
 
 import { savePurchaseLog, getPurchaseLogs } from './services/dbPurchase';
 
@@ -36,13 +36,6 @@ export default function App() {
     } finally {
       setIsSyncing(false);
     }
-  };
-
-  const handleResetAppsScript = () => {
-     if(window.confirm("Are you sure you want to reset the Google Apps Script URL? You will be prompted to enter a new one on your next sync.")) {
-         clearScriptUrl();
-         alert("Apps Script URL has been reset.");
-     }
   };
 
   useEffect(() => {
@@ -249,10 +242,6 @@ export default function App() {
                        <button onClick={handleSyncToSheets} disabled={isSyncing} className="flex items-center gap-2 bg-[#10b981] hover:bg-[#059669] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50">
                           <Database size={16} /> 
                           {isSyncing ? 'Syncing...' : 'Sync to Sheets'}
-                       </button>
-                       <button onClick={handleResetAppsScript} className="flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
-                          <Settings size={16} /> 
-                          Reset Script URL
                        </button>
                        <div className="relative">
                           <input 

@@ -1,17 +1,11 @@
 import { PurchaseLog } from '../type';
 
-const SCRIPT_URL_KEY = 'halagel_app_script_url';
+// Make sure to add your Apps Script Web App URL in your .env file
+// Example: VITE_APPS_SCRIPT_URL=https://script.google.com/macros/s/.../exec
+const SCRIPT_URL = (import.meta as any).env.VITE_APPS_SCRIPT_URL || '';
 
 export const getScriptUrl = (): string | null => {
-  return localStorage.getItem(SCRIPT_URL_KEY);
-};
-
-export const setScriptUrl = (url: string) => {
-  localStorage.setItem(SCRIPT_URL_KEY, url);
-};
-
-export const clearScriptUrl = () => {
-  localStorage.removeItem(SCRIPT_URL_KEY);
+  return SCRIPT_URL || null;
 };
 
 export const fetchLogsFromSheets = async (): Promise<PurchaseLog[]> => {
@@ -33,13 +27,9 @@ export const fetchLogsFromSheets = async (): Promise<PurchaseLog[]> => {
 };
 
 export const syncLogsToSheetsDB = async (logs: PurchaseLog[]) => {
-  let url = getScriptUrl();
+  const url = getScriptUrl();
   if (!url) {
-    url = window.prompt("Please enter your Google Apps Script Web App URL to configure Google Sheets Database:");
-    if (!url) {
-      throw new Error("Sync cancelled. Apps Script URL is required.");
-    }
-    setScriptUrl(url);
+    throw new Error("Apps Script URL is not configured. Please add VITE_APPS_SCRIPT_URL to your .env file.");
   }
 
   try {
@@ -58,8 +48,7 @@ export const syncLogsToSheetsDB = async (logs: PurchaseLog[]) => {
     return result.sheetUrl;
   } catch (err: any) {
     if (err.message === 'Failed to fetch') {
-      clearScriptUrl();
-      throw new Error(`Failed to connect to the Apps Script URL. Please check the URL. Try syncing again to re-enter.`);
+      throw new Error(`Failed to connect to the Apps Script URL. Please check the URL and CORS settings.`);
     }
     throw err;
   }
