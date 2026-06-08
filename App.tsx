@@ -7,9 +7,9 @@ import { PurchaseInterface } from './components/PurchaseInterface';
 import { PurchasePdfTemplate } from './components/PurchasePdfTemplate';
 import { LOGO_BASE64 } from './constants';
 import { PurchaseLog } from './type';
-import { syncLogsToSheets } from './syncToSheets';
+import { syncLogsToSheetsDB, clearScriptUrl } from './services/appScriptDB';
 
-import { savePurchaseLog, getPurchaseLogs } from './services/firebasePurchase';
+import { savePurchaseLog, getPurchaseLogs } from './services/dbPurchase';
 
 export default function App() {
   const [activeView, setActiveView] = useState<'dashboard' | 'purchase' | 'design' | 'database'>('dashboard');
@@ -25,19 +25,24 @@ export default function App() {
   const handleSyncToSheets = async () => {
     try {
       setIsSyncing(true);
-      const sheetUrl = await syncLogsToSheets(purchaseHistory);
+      const sheetUrl = await syncLogsToSheetsDB(purchaseHistory);
       if (sheetUrl) {
-         alert(`Successfully synced to Google Sheets!`);
-         window.open(sheetUrl, '_blank');
-      } else {
-         alert(`Successfully synced to Google Apps Script backend!`);
+         alert(`Successfully synced with Google Sheets!`);
       }
+      await loadHistory(); // Reload history after sync to get any updates
     } catch (e: any) {
       console.error(e);
-      alert("Failed to sync to Google Sheets: " + e.message);
+      alert(e.message);
     } finally {
       setIsSyncing(false);
     }
+  };
+
+  const handleResetAppsScript = () => {
+     if(window.confirm("Are you sure you want to reset the Google Apps Script URL? You will be prompted to enter a new one on your next sync.")) {
+         clearScriptUrl();
+         alert("Apps Script URL has been reset.");
+     }
   };
 
   useEffect(() => {
@@ -244,6 +249,10 @@ export default function App() {
                        <button onClick={handleSyncToSheets} disabled={isSyncing} className="flex items-center gap-2 bg-[#10b981] hover:bg-[#059669] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50">
                           <Database size={16} /> 
                           {isSyncing ? 'Syncing...' : 'Sync to Sheets'}
+                       </button>
+                       <button onClick={handleResetAppsScript} className="flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                          <Settings size={16} /> 
+                          Reset Script URL
                        </button>
                        <div className="relative">
                           <input 

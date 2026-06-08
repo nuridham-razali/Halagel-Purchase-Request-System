@@ -6,7 +6,7 @@ import { PurchaseRequisitionData, INITIAL_PURCHASE_DATA, PurchaseItem, PurchaseL
 import { PurchasePdfTemplate } from './PurchasePdfTemplate';
 import { FormInput, FormSelect } from './FormControls';
 import { LOGO_BASE64 } from '../constants';
-import { savePurchaseLog, getPurchaseLogs } from '../services/firebasePurchase';
+import { savePurchaseLog, getPurchaseLogs } from '../services/dbPurchase';
 
 import { ACCOUNT_CODES } from './accountCodes';
 
