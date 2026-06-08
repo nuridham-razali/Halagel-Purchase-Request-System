@@ -1,9 +1,9 @@
 {
-  apiKey: "AIzaSyCN_7P8ma_gOnDuzpZQ6ksp--IoAJQACuo",
-  authDomain: "purchase-request-5015c.firebaseapp.com",
-  projectId: "purchase-request-5015c",
-  storageBucket: "purchase-request-5015c.firebasestorage.app",
-  messagingSenderId: "782509731652",
-  appId: "1:782509731652:web:8f035e51c61ac665f3f111",
-  measurementId: "G-4RTRELVR8F"
+"projectId": "purchase-request-5015c",
+  "appId": "1:782509731652:web:8f035e51c61ac665f3f111",
+  "apiKey": "AIzaSyCN_7P8ma_gOnDuzpZQ6ksp--IoAJQACuo"
+  "authDomain": "purchase-request-5015c.firebaseapp.com",
+  "storageBucket": "purchase-request-5015c.firebasestorage.app",
+  "messagingSenderId": "782509731652",
+  "measurementId": "G-4RTRELVR8F"
 }
