@@ -7,7 +7,6 @@ import { PurchaseInterface } from './components/PurchaseInterface';
 import { PurchasePdfTemplate } from './components/PurchasePdfTemplate';
 import { LOGO_BASE64 } from './constants';
 import { PurchaseLog } from './type';
-import { syncLogsToSheetsDB } from './services/appScriptDB';
 
 import { savePurchaseLog, getPurchaseLogs } from './services/dbPurchase';
 

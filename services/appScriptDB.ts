@@ -54,11 +54,9 @@ export const fetchLogsFromSheets = async (): Promise<PurchaseLog[]> => {
   }
 };
 
-export const syncLogsToSheetsDB = async (logs: PurchaseLog[]) => {
+export const createLogInSheets = async (log: PurchaseLog) => {
   const url = getScriptUrl();
-  if (!url) {
-    throw new Error("Apps Script URL is not configured. Please add VITE_APPS_SCRIPT_URL to your .env file.");
-  }
+  if (!url) return;
 
   try {
     await fetch(url, {
@@ -67,14 +65,27 @@ export const syncLogsToSheetsDB = async (logs: PurchaseLog[]) => {
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
       },
-      body: JSON.stringify({ action: 'save', logs }),
+      body: JSON.stringify({ action: 'create', data: log }),
     });
+  } catch (err) {
+    console.error('Failed to create in sheets:', err);
+  }
+};
 
-    return "synced";
-  } catch (err: any) {
-    if (err.message === 'Failed to fetch') {
-      throw new Error(`Failed to connect to the Apps Script URL. Please check the URL and CORS settings.`);
-    }
-    throw err;
+export const updateLogInSheets = async (log: PurchaseLog) => {
+  const url = getScriptUrl();
+  if (!url) return;
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+      body: JSON.stringify({ action: 'update', data: log }),
+    });
+  } catch (err) {
+    console.error('Failed to update in sheets:', err);
   }
 };
