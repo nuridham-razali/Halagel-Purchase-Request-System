@@ -16,6 +16,8 @@ export default function App() {
   const [purchaseHistory, setPurchaseHistory] = useState<PurchaseLog[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [editTarget, setEditTarget] = useState<PurchaseLog | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [appsScriptUrl, setAppsScriptUrl] = useState('');
 
   const [downloadTarget, setDownloadTarget] = useState<PurchaseLog | null>(null);
   const printRef = useRef<HTMLDivElement>(null);
@@ -159,6 +161,16 @@ export default function App() {
                <FileText size={18} />
                <span>Create New</span>
             </button>
+            <button 
+               onClick={() => {
+                  setAppsScriptUrl(localStorage.getItem('CUSTOM_APPS_SCRIPT_URL') || '');
+                  setIsSettingsOpen(true);
+               }}
+               className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
+            >
+               <Settings size={18} />
+               <span>Settings</span>
+            </button>
          </div>
       </header>
 
@@ -300,6 +312,62 @@ export default function App() {
              </div>
           )}
       </main>
+
+      {/* Settings Modal */}
+      {isSettingsOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 text-left">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-slate-200">
+              <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <Settings size={22} className="text-[#0284c7]" />
+                Application Settings
+              </h2>
+            </div>
+            <div className="p-6 flex-1 overflow-y-auto">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1">
+                    Google Apps Script URL (For Auto-Sync)
+                  </label>
+                  <p className="text-xs text-slate-500 mb-3">
+                    Deploy the Apps Script code and paste the Web App URL here. All users will then sync PRs to the same Google Sheet automatically.
+                  </p>
+                  <input
+                    type="text"
+                    value={appsScriptUrl}
+                    onChange={(e) => setAppsScriptUrl(e.target.value)}
+                    placeholder="https://script.google.com/macros/s/.../exec"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0284c7] outline-none font-mono text-sm leading-relaxed"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="p-6 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 rounded-b-xl">
+              <button 
+                onClick={() => setIsSettingsOpen(false)}
+                className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  if (appsScriptUrl) {
+                    localStorage.setItem('CUSTOM_APPS_SCRIPT_URL', appsScriptUrl.trim());
+                  } else {
+                    localStorage.removeItem('CUSTOM_APPS_SCRIPT_URL');
+                  }
+                  setIsSettingsOpen(false);
+                  loadHistory();
+                  alert("Settings saved!");
+                }}
+                className="px-4 py-2 bg-[#0284c7] text-white font-medium hover:bg-[#0369a1] rounded-lg transition-colors"
+              >
+                Save Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="w-full py-6 text-center mt-auto">
          <p className="text-sm text-slate-500">
