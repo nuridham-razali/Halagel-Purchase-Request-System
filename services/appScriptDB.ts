@@ -13,7 +13,10 @@ export const fetchLogsFromSheets = async (): Promise<PurchaseLog[]> => {
   if (!url) return [];
 
   try {
-    const res = await fetch(url);
+    const fetchUrl = `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`;
+    const res = await fetch(fetchUrl, {
+      cache: 'no-store'
+    });
     const data = await res.json();
     if (data.status === 'success' && data.logs) {
       // Sort descending by ID

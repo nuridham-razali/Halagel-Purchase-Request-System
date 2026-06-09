@@ -20,23 +20,6 @@ export default function App() {
   const [downloadTarget, setDownloadTarget] = useState<PurchaseLog | null>(null);
   const printRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isSyncing, setIsSyncing] = useState(false);
-
-  const handleSyncToSheets = async () => {
-    try {
-      setIsSyncing(true);
-      const sheetUrl = await syncLogsToSheetsDB(purchaseHistory);
-      if (sheetUrl) {
-         alert(`Successfully synced with Google Sheets!`);
-      }
-      await loadHistory(); // Reload history after sync to get any updates
-    } catch (e: any) {
-      console.error(e);
-      alert(e.message);
-    } finally {
-      setIsSyncing(false);
-    }
-  };
 
   useEffect(() => {
     if (downloadTarget && !isDownloading) {
@@ -109,6 +92,13 @@ export default function App() {
     if (activeView === 'dashboard' || activeView === 'database') {
       loadHistory();
       setSearchQuery(''); // Reset search when switching views
+      
+      // Auto-refresh data every 5 seconds so other users see new PRs immediately
+      const intervalId = setInterval(() => {
+        loadHistory();
+      }, 5000);
+      
+      return () => clearInterval(intervalId);
     }
   }, [activeView]);
 
@@ -239,10 +229,6 @@ export default function App() {
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-4">
                     <h2 className="text-2xl font-bold text-[#1e293b]">Purchase Requests Database</h2>
                     <div className="flex items-center gap-4">
-                       <button onClick={handleSyncToSheets} disabled={isSyncing} className="flex items-center gap-2 bg-[#10b981] hover:bg-[#059669] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-50">
-                          <Database size={16} /> 
-                          {isSyncing ? 'Syncing...' : 'Sync to Sheets'}
-                       </button>
                        <div className="relative">
                           <input 
                              type="text" 
