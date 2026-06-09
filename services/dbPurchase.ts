@@ -1,5 +1,5 @@
 import { PurchaseLog } from '../type';
-import { createLogInSheets, updateLogInSheets, fetchLogsFromSheets, getScriptUrl } from './appScriptDB';
+import { syncLogsToSheetsDB, fetchLogsFromSheets, getScriptUrl } from './appScriptDB';
 
 const LOCAL_STORAGE_KEY = 'halagel_purchase_requests';
 
@@ -8,10 +8,8 @@ export const savePurchaseLog = async (log: PurchaseLog): Promise<void> => {
     const existingLogs = await getPurchaseLogs();
     const index = existingLogs.findIndex(l => l.id === log.id);
     
-    let isUpdate = false;
     if (index >= 0) {
       existingLogs[index] = log;
-      isUpdate = true;
     } else {
       existingLogs.push(log);
     }
@@ -20,11 +18,7 @@ export const savePurchaseLog = async (log: PurchaseLog): Promise<void> => {
 
     // Automatically sync to sheets if configured
     if (getScriptUrl()) {
-      if (isUpdate) {
-        await updateLogInSheets(log);
-      } else {
-        await createLogInSheets(log);
-      }
+      await syncLogsToSheetsDB(existingLogs);
     }
   } catch (error) {
     console.error("Error saving purchase log: ", error);

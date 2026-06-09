@@ -2,7 +2,7 @@ import { PurchaseLog } from '../type';
 
 // Make sure to add your Apps Script Web App URL in your .env file
 // Example: VITE_APPS_SCRIPT_URL=https://script.google.com/macros/s/.../exec
-const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbx5nHdCs-P59IZkqxN6nBvPH19mNnfgTImObYgDf2_YIQ4WiWzIX0AZyFpwmu3lK--MaA/exec';
+const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbz31_ZNS2hz6JOpih75MxHSju9n0yAJ6jNoedAlfk4qZaKQ4apvAYsD7k1LpZ4SKrME/exec';
 const SCRIPT_URL = (import.meta as any).env.VITE_APPS_SCRIPT_URL || DEFAULT_URL;
 
 export const getScriptUrl = (): string | null => {
@@ -54,7 +54,7 @@ export const fetchLogsFromSheets = async (): Promise<PurchaseLog[]> => {
   }
 };
 
-export const createLogInSheets = async (log: PurchaseLog) => {
+export const syncLogsToSheetsDB = async (logs: PurchaseLog[]) => {
   const url = getScriptUrl();
   if (!url) return;
 
@@ -65,27 +65,9 @@ export const createLogInSheets = async (log: PurchaseLog) => {
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
       },
-      body: JSON.stringify({ action: 'create', data: log }),
+      body: JSON.stringify({ action: 'save', logs }),
     });
   } catch (err) {
-    console.error('Failed to create in sheets:', err);
-  }
-};
-
-export const updateLogInSheets = async (log: PurchaseLog) => {
-  const url = getScriptUrl();
-  if (!url) return;
-
-  try {
-    await fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
-      body: JSON.stringify({ action: 'update', data: log }),
-    });
-  } catch (err) {
-    console.error('Failed to update in sheets:', err);
+    console.error('Failed to sync sheets:', err);
   }
 };
