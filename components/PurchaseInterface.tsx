@@ -269,7 +269,7 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                         className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-gray-800 text-sm focus:bg-white focus:ring-2 focus:ring-purple-100 focus:border-purple-500 outline-none transition-all appearance-none"
                     >
                         <option value="HALAGEL (M) SDN. BHD.">HALAGEL (M) SDN. BHD.</option>
-                        <option value="HALAGEL PRODUCT SDN. BHD.">HALAGEL PRODUCTS SDN. BHD.</option>
+                        <option value="HALAGEL PRODUCTS SDN. BHD.">HALAGEL PRODUCTS SDN. BHD.</option>
                         <option value="HALAGEL PLANT (M) SDN. BHD.">HALAGEL PLANT (M) SDN. BHD.</option>
                         <option value="BIOWISE SDN BHD">BIOWISE SDN BHD</option>
                         <option value="KOHALAGEL">KOHALAGEL</option>
