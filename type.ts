@@ -127,7 +127,7 @@ export interface PurchaseRequisitionData {
   recommendedSupplier: string;
   contactPerson: string;
   telNo: string;
-  faxNo: string;
+  email: string;
   term: string;
 
   // Signatures
@@ -165,7 +165,7 @@ export const INITIAL_PURCHASE_DATA: PurchaseRequisitionData = {
   recommendedSupplier: '',
   contactPerson: '',
   telNo: '',
-  faxNo: '',
+  email: '',
   term: '',
   requestedBy: { name: '', date: new Date().toISOString().split('T')[0], signature: '' },
   approvedBy: { name: '', date: '' },
