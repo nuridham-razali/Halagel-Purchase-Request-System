@@ -135,9 +135,31 @@ export default function App() {
   }, {} as Record<string, Record<string, PurchaseLog[]>>);
 
   const recentHistory = purchaseHistory.slice(0, 5);
+  const [showBanner, setShowBanner] = useState(true);
 
   return (
     <div className="min-h-screen bg-[#f4f7f9] flex flex-col font-sans text-slate-800">
+      {showBanner && (
+        <div className="fixed bottom-6 right-6 bg-white border border-slate-200 shadow-2xl rounded-lg p-4 z-50 w-80 flex flex-col gap-2 border-l-4 border-l-[#0284c7] animate-in slide-in-from-right-8 fade-in duration-300">
+          <div className="flex justify-between items-start">
+            <div className="flex items-center gap-2 text-[#0284c7] font-semibold">
+              <Layers className="w-4 h-4" />
+              <span>System Update</span>
+            </div>
+            <button onClick={() => setShowBanner(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none">
+              &times;
+            </button>
+          </div>
+          <div className="text-sm text-slate-600">
+            <strong>Changes deployed:</strong>
+            <ul className="list-disc list-inside mt-1 space-y-1">
+              <li>Fax No replaced with Email in Supplier section</li>
+              <li>Item list template expanded to 10 rows</li>
+              <li>Company name fixed to HALAGEL PRODUCTS SDN BHD</li>
+            </ul>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm z-10">
          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveView('dashboard')}>
