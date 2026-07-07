@@ -111,7 +111,7 @@ export const PurchasePdfTemplate = forwardRef<HTMLDivElement, PurchasePdfTemplat
                     </tr>
                 </thead>
                 <tbody>
-                    {data.items.slice(0, 8).map((item, index) => (
+                    {data.items.slice(0, 10).map((item, index) => (
                         <tr key={item.id || index} className="h-[28px]">
                             <td className="border-b border-r border-black p-2 text-center align-top">{index + 1}.</td>
                             <td className="border-b border-r border-black p-2 text-center align-top break-all">{item.itemCode || '-'}</td>
@@ -122,8 +122,8 @@ export const PurchasePdfTemplate = forwardRef<HTMLDivElement, PurchasePdfTemplat
                             <td className="border-b border-r border-black p-2 text-center align-top">{formatCurrency(Number(item.quantity || 0) * Number(item.costPerUnit || 0))}</td>
                         </tr>
                     ))}
-                    {/* Fill empty rows up to 8 */}
-                    {Array.from({ length: Math.max(0, 8 - data.items.length) }).map((_, i) => (
+                    {/* Fill empty rows up to 10 */}
+                    {Array.from({ length: Math.max(0, 10 - data.items.length) }).map((_, i) => (
                          <tr key={`empty-${i}`} className="h-[28px]">
                             <td className="border-b border-r border-black p-2 text-center">{data.items.length + i + 1}.</td>
                             <td className="border-b border-r border-black p-2 text-center"></td>
@@ -158,9 +158,9 @@ export const PurchasePdfTemplate = forwardRef<HTMLDivElement, PurchasePdfTemplat
                     <span className="font-bold">:</span>
                     <span className="text-[11px] break-words">{data.telNo || '-'}</span>
 
-                    <span className="font-bold">Fax No</span>
+                    <span className="font-bold">Email</span>
                     <span className="font-bold">:</span>
-                    <span className="text-[11px] break-words">{data.faxNo || '-'}</span>
+                    <span className="text-[11px] break-words">{data.email || '-'}</span>
 
                     <span className="font-bold">Term</span>
                     <span className="font-bold">:</span>
