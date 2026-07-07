@@ -428,7 +428,7 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                 <div className="grid grid-cols-2 gap-4">
                     <FormInput label="Contact Person" value={purchaseData.contactPerson} onChange={(e) => handlePurchaseChange('contactPerson', e.target.value)} />
                     <FormInput label="Tel No" value={purchaseData.telNo} onChange={(e) => handlePurchaseChange('telNo', e.target.value)} />
-                    <FormInput label="Fax No" value={purchaseData.faxNo} onChange={(e) => handlePurchaseChange('faxNo', e.target.value)} />
+                    <FormInput label="Email" type="email" value={purchaseData.email} onChange={(e) => handlePurchaseChange('email', e.target.value)} />
                     <FormInput label="Term" value={purchaseData.term} onChange={(e) => handlePurchaseChange('term', e.target.value)} />
                 </div>
             </div>
