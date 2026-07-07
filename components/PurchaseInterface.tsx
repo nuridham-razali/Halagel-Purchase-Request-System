@@ -32,7 +32,7 @@ const DEPARTMENTS = [
 ];
 
 export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, initialLog?: PurchaseLog | null }) => {
-  const [purchaseData, setPurchaseData] = useState<PurchaseRequisitionData>(initialLog?.data || INITIAL_PURCHASE_DATA);
+  const [purchaseData, setPurchaseData] = useState<PurchaseRequisitionData>(() => initialLog?.data ? JSON.parse(JSON.stringify(initialLog.data)) : JSON.parse(JSON.stringify(INITIAL_PURCHASE_DATA)));
   const [purchaseHistory, setPurchaseHistory] = useState<PurchaseLog[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   
