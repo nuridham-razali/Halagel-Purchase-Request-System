@@ -20,6 +20,7 @@ export default function App() {
   const [downloadTarget, setDownloadTarget] = useState<PurchaseLog | null>(null);
   const printRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
 
   useEffect(() => {
     if (downloadTarget && !isDownloading) {
@@ -135,7 +136,6 @@ export default function App() {
   }, {} as Record<string, Record<string, PurchaseLog[]>>);
 
   const recentHistory = purchaseHistory.slice(0, 5);
-  const [showBanner, setShowBanner] = useState(true);
 
   return (
     <div className="min-h-screen bg-[#f4f7f9] flex flex-col font-sans text-slate-800">
