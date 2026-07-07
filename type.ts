@@ -152,7 +152,7 @@ export interface PurchaseLog {
 export const INITIAL_PURCHASE_DATA: PurchaseRequisitionData = {
   date: new Date().toISOString().split('T')[0],
   prNo: '',
-  companyName: 'HALAGEL (M) SDN. BHD.',
+  companyName: 'HALAGEL PRODUCTS SDN. BHD.',
   requesterName: '',
   department: '',
   deliveryRequirement: '',
