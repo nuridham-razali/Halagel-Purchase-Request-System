@@ -273,6 +273,9 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                         <option value="HALAGEL PLANT (M) SDN. BHD.">HALAGEL PLANT (M) SDN. BHD.</option>
                         <option value="BIOWISE SDN BHD">BIOWISE SDN BHD</option>
                         <option value="KOHALAGEL">KOHALAGEL</option>
+                        <option value="HALAGEL EDAR SDN BHD">HALAGEL EDAR SDN BHD</option>
+                        <option value="SEMCODIGINET SDN BHD">SEMCODIGINET SDN BHD</option>
+                        <option value="IDAMAN PHARMA SDN BHD">IDAMAN PHARMA SDN BHD</option>
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                             <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
