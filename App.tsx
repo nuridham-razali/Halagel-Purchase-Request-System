@@ -22,6 +22,8 @@ export default function App() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (downloadTarget && !isDownloading) {
         generatePdfFromLog();
@@ -85,21 +87,16 @@ export default function App() {
   };
 
   const loadHistory = async () => {
+    setLoading(true);
     const logs = await getPurchaseLogs();
     setPurchaseHistory(logs);
+    setLoading(false);
   };
 
   useEffect(() => {
     if (activeView === 'dashboard' || activeView === 'database') {
       loadHistory();
       setSearchQuery(''); // Reset search when switching views
-      
-      // Auto-refresh data every 5 seconds so other users see new PRs immediately
-      const intervalId = setInterval(() => {
-        loadHistory();
-      }, 5000);
-      
-      return () => clearInterval(intervalId);
     }
   }, [activeView]);
 
@@ -205,10 +202,16 @@ export default function App() {
                    <div className="flex justify-between items-end mb-4">
                        <h2 className="text-2xl font-bold text-[#1e293b]">Recent Requests</h2>
                        <button onClick={loadHistory} className="flex items-center gap-1.5 text-[#0284c7] hover:text-[#0369a1] text-sm font-medium transition-colors">
-                          <RefreshCw size={14} /> Refresh
+                          <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Refresh
                        </button>
                    </div>
 
+                   {loading ? (
+                      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+                         <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#0284c7] mb-4" />
+                         <p className="text-slate-600">Syncing with Google Sheets...</p>
+                      </div>
+                   ) : (
                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden divide-y divide-slate-100">
                       {recentHistory.length === 0 ? (
                          <div className="p-8 text-center text-slate-500">No recent requests.</div>
@@ -242,6 +245,7 @@ export default function App() {
                          ))
                       )}
                    </div>
+                   )}
                 </div>
              </>
           )}
@@ -262,11 +266,17 @@ export default function App() {
                           <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                        </div>
                        <button onClick={loadHistory} className="flex items-center gap-1.5 text-[#0284c7] hover:text-[#0369a1] text-sm font-medium transition-colors whitespace-nowrap">
-                          <RefreshCw size={14} /> Refresh
+                          <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Refresh
                        </button>
                     </div>
                 </div>
 
+                {loading ? (
+                   <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+                      <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#0284c7] mb-4" />
+                      <p className="text-slate-600">Syncing with Google Sheets...</p>
+                   </div>
+                ) : (
                 <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-8">
                    {filteredHistory.length === 0 ? (
                       <div className="py-12 text-center text-slate-500">
@@ -319,6 +329,7 @@ export default function App() {
                       ))
                    )}
                 </div>
+                 )}
              </div>
           )}
       </main>
