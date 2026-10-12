@@ -274,7 +274,7 @@ export const PurchaseInterface = ({ onBack, initialLog }: { onBack: () => void, 
                         <option value="BIOWISE SDN BHD">BIOWISE SDN BHD</option>
                         <option value="KOHALAGEL">KOHALAGEL</option>
                         <option value="HALAGEL EDAR SDN BHD">HALAGEL EDAR SDN BHD</option>
-                        <option value="SEMCODIGINET SDN BHD">SEMCODIGINET SDN BHD</option>
+                        <option value="IDAMAN DIGITAL NETWORK SDN BHD">IDAMAN DIGITAL NETWORK SDN BHD</option>
                         <option value="IDAMAN PHARMA SDN BHD">IDAMAN PHARMA SDN BHD</option>
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
