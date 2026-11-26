@@ -41,14 +41,24 @@ export const PurchasePdfTemplate = forwardRef<HTMLDivElement, PurchasePdfTemplat
     <div ref={ref} className="w-[210mm] min-h-[297mm] bg-white text-black box-border relative p-[10mm] select-none text-[11px]" style={{ fontFamily: 'Arial, sans-serif' }}>
        
        {/* Header */}
-       <div className="relative flex flex-col items-center mb-6 text-black mt-2">
-            <div className="flex items-center justify-center mb-2">
-                <img src={LOGO_BASE64} className="h-[60px] w-auto object-contain mr-6" alt="Logo" />
-                <h1 className="text-[28px] font-bold uppercase tracking-wide">HALAGEL GROUP OF COMPANIES</h1>
-            </div>
-            <div className="flex flex-col items-center mb-2">
-                <h2 className="text-[20px] font-bold uppercase leading-tight mt-1">PAYMENT/PURCHASE REQUISITION</h2>
-                <h3 className="text-[20px] font-bold uppercase leading-tight mt-1">{data.companyName}</h3>
+       <div className="relative flex flex-col items-center mb-6 text-black mt-1">
+            <img
+                src={LOGO_BASE64}
+                className="absolute left-0 top-0 h-[60px] w-auto object-contain"
+                alt="Logo"
+            />
+            <div className="w-full flex flex-col items-center text-center pt-[34px]">
+                <h1 className="text-[23px] font-bold uppercase tracking-wide leading-tight">
+                    HALAGEL GROUP OF COMPANIES
+                </h1>
+                <div className="flex flex-col items-center mt-3">
+                    <h2 className="text-[16px] font-bold uppercase leading-tight">
+                        PAYMENT/PURCHASE REQUISITION
+                    </h2>
+                    <h3 className="text-[16px] font-bold uppercase leading-tight mt-1">
+                        {data.companyName}
+                    </h3>
+                </div>
             </div>
        </div>
 
